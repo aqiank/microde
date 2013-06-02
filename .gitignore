@@ -1,0 +1,13 @@
+*~
+*.o
+*.swp
+*.log
+*.cache
+*.m4
+config.h
+config.h.in
+*.status
+configure
+build
+Makefile
+microde

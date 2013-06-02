@@ -1,0 +1,47 @@
+# @configure_input@
+
+# Package-specific substitution variables
+package 	= @PACKAGE_NAME@
+version 	= @PACKAGE_VERSION@
+tarname 	= @PACKAGE_TARNAME@
+distdir 	= $(tarname)-$(version)
+
+# Prefix-specific substitution variables
+prefix		= @prefix@
+exec_prefix	= @exec_prefix@
+bindir		= @bindir@
+
+# Tool-specific substitution variables
+CC		= @CC@
+CFLAGS		= @CFLAGS@ @GTK2_CFLAGS@ @GTKSOURCEVIEW2_CFLAGS@
+CPPFLAGS	= @CPPFLAGS@
+LIBS		= @LIBS@ @GTK2_LIBS@ @GTKSOURCEVIEW2_LIBS@
+
+# VPATH-specific substitution variables
+srcdir		= @srcdir@
+VPATH		= @srcdir@
+
+OBJS=main.o settings.o microde_settings.o ui.o callbacks_gtk.o gen_makefile.o util.o makefile.o
+
+all: microde
+
+microde: $(OBJS)
+	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $(OBJS) $(LIBS)
+
+clean:
+	-rm $(OBJS) microde
+
+install:
+	install -d $(DESTDIR)$(bindir)
+	install -m 0755 microde $(DESTDIR)$(bindir)
+
+uninstall:
+	-rm $(DESTDIR)$(bindir)/microde
+
+Makefile: Makefile.in ../config.status
+	cd .. && ./config.status src/$@
+
+../config.status: ../configure
+	cd .. && ./config.status --recheck
+
+.PHONY: all clean install uninstall
